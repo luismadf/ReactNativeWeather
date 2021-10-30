@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -13,6 +13,11 @@ import {
 import Formulario from './components/Formulario';
 
 const App = () => {
+  const [busqueda, setBusqueda] = useState({
+    ciudad: '',
+    pais: '',
+  });
+
   const hideKeyboard = () => {
     Keyboard.dismiss();
   };
@@ -22,7 +27,7 @@ const App = () => {
       <TouchableWithoutFeedback onPress={() => hideKeyboard()}>
         <View style={styles.app}>
           <View style={styles.contenido}>
-            <Formulario />
+            <Formulario busqueda={busqueda} setBusqueda={setBusqueda} />
           </View>
         </View>
       </TouchableWithoutFeedback>

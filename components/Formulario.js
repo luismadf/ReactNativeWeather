@@ -6,28 +6,60 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Animated,
+  Alert,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
-const Formulario = () => {
+const Formulario = ({busqueda, setBusqueda}) => {
   const [animate] = useState(new Animated.Value(1));
+  const {pais, ciudad} = busqueda;
 
   const animacionEntrada = () => {
-    console.log('Entrada...');
+    Animated.spring(animate, {
+      toValue: 0.8,
+    }).start();
   };
 
   const animacionSalida = () => {
-    console.log('Salida...');
+    Animated.spring(animate, {
+      toValue: 1,
+      friction: 6,
+      tension: 20,
+    }).start();
+  };
+
+  const consultarClima = () => {
+    if (pais.trim() === '' || ciudad.trim() === '') {
+      showAlert();
+      return;
+    }
+  };
+
+  const showAlert = () => {
+    Alert.alert('Error', 'Agrega una ciudad y país para el busqueda', [
+      {text: 'Entendido'},
+    ]);
+  };
+
+  const estiloAnimacion = {
+    transform: [{scale: animate}],
   };
 
   return (
     <>
       <View style={styles.formulario}>
         <View>
-          <TextInput style={styles.input} placeholder="Ciudad" />
+          <TextInput
+            style={styles.input}
+            placeholder="Ciudad"
+            value={ciudad}
+            onChangeText={ciudad => setBusqueda({...busqueda, ciudad})}
+          />
         </View>
         <View>
           <Picker
+            selectedValue={pais}
+            onValueChange={pais => setBusqueda({...busqueda, pais})}
             itemStyle={{height: 120, backgroundColor: '#fff', borderRadius: 8}}>
             <Picker.Item label="-- Seleccione un país --" value="" />
             <Picker.Item label="Estados Unidos" value="US" />
@@ -41,10 +73,11 @@ const Formulario = () => {
         </View>
         <TouchableWithoutFeedback
           onPressIn={() => animacionEntrada()}
-          onPressOut={() => animacionSalida()}>
-          <View style={styles.btnBuscar}>
+          onPressOut={() => animacionSalida()}
+          onPress={() => consultarClima()}>
+          <Animated.View style={[styles.btnBuscar, estiloAnimacion]}>
             <Text style={styles.textBuscar}>Buscar Clima</Text>
-          </View>
+          </Animated.View>
         </TouchableWithoutFeedback>
       </View>
     </>
