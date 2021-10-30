@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
-const Formulario = ({busqueda, setBusqueda}) => {
+const Formulario = ({busqueda, setBusqueda, setConsultar}) => {
   const [animate] = useState(new Animated.Value(1));
   const {pais, ciudad} = busqueda;
 
@@ -33,6 +33,7 @@ const Formulario = ({busqueda, setBusqueda}) => {
       showAlert();
       return;
     }
+    setConsultar(true);
   };
 
   const showAlert = () => {
